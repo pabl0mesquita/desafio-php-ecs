@@ -2,7 +2,7 @@
     "name": "pablomesq/php-apache-ecs",
     "autoload": {
         "psr-4": {
-            "Source\\": "src/"
+            "Core\\": "Core/"
         }
     },
     "authors": [
@@ -17,15 +17,13 @@
         "monolog/monolog": "^3.8",
         "open-telemetry/exporter-otlp": "^1.2",
         "symfony/http-client": "^7.2",
-        "nyholm/psr7": "^1.8",
         "open-telemetry/opentelemetry-php-contrib": "^0.0.17",
-        "graze/guzzle-jsonrpc": "^2.1",
-        "psr/log": "^3.0"
+        "graze/guzzle-jsonrpc": "^2.1"
     },
     "config": {
         "allow-plugins": {
-            "php-http/discovery": true,
-            "tbachert/spi": true
+            "php-http/discovery": false,
+            "tbachert/spi": false
         }
     }
 }
