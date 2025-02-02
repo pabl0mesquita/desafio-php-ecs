@@ -52,18 +52,14 @@ jobs:
             '.containerDefinitions[0].image = $IMAGE' \
             task-definition.json > new-task-definition.json
             
-      - name: 📜 Criar nova definição de tarefa no ECS
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: php-apache-ecs-latest
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+      - name: 📜 Criar nova Task Definition no ECS
+        id: register-task-def
+        run: |
+          TASK_REVISION=$(aws ecs register-task-definition --cli-input-json file://new-task-definition.json \
+            --query 'taskDefinition.taskDefinitionArn' --output text)
+          echo "TASK_REVISION=$TASK_REVISION" >> $GITHUB_ENV
 
       - name: 🚀 Atualizar serviço ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          service: ${{ env.ECS_SERVICE }}
-          wait-for-service-stability: true
+        run: |
+          aws ecs update-service --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE --task-definition $TASK_REVISION
