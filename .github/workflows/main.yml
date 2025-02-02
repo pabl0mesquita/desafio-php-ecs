@@ -38,7 +38,19 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./src
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          
+      - name: 📥 Obter a Task Definition atual do ECS
+        run: |
+          aws ecs describe-task-definition --task-definition $ECS_TASK_FAMILY \
+            --query taskDefinition > task-definition.json
 
+      - name: 🔄 Atualizar Task Definition com nova imagem
+        run: |
+          NEW_IMAGE="${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest"
+          jq --arg IMAGE "$NEW_IMAGE" \
+            '.containerDefinitions[0].image = $IMAGE' \
+            task-definition.json > new-task-definition.json
+            
       - name: 📜 Criar nova definição de tarefa no ECS
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
