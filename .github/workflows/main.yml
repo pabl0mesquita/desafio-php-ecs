@@ -12,7 +12,7 @@ env:
   ECS_SERVICE: ${{ secrets.ECS_SERVICE }}
   ECS_TASK_DEFINITION: ${{ secrets.ECS_TASK_DEFINITION }}
   ECS_TASK_FAMILY: ${{ secrets.ECS_TASK_FAMILY }}
-  ECS_IMAGE_TAG: latest #${{ github.sha }}
+  IMAGE_TAG: latest #${{ github.sha }}
 
 jobs:
   deploy:
