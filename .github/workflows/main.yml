@@ -55,7 +55,8 @@ jobs:
       - name: 📜 Criar nova Task Definition no ECS
         id: register-task-def
         run: |
-          TASK_REVISION=$(aws ecs register-task-definition --cli-input-json file://new-task-definition.json \
+          jq 'del(.taskDefinitionArn, .status, .revision, .registeredAt, .registeredBy)' new-task-definition.json > clean-task-definition.json
+          TASK_REVISION=$(aws ecs register-task-definition --cli-input-json file://clean-task-definition.json \
             --query 'taskDefinition.taskDefinitionArn' --output text)
           echo "TASK_REVISION=$TASK_REVISION" >> $GITHUB_ENV
 
