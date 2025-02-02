@@ -26,11 +26,11 @@ WORKDIR /var/www/html/
 RUN chown -R www-data:www-data .
 
 # Copia o composer 
-COPY ./src/composer.json .
+COPY ./composer.json .
  
 # Instalar as dependências do projeto
 RUN composer install
-COPY ./src .
+COPY . .
 
 # Expor a porta 80
 EXPOSE 80
