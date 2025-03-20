@@ -28,7 +28,7 @@ class Connection
                 return self::$instance;
 
             } catch( PDOException $e ) {
-                var_dump($e);exit;
+                return null;
             }
         }
 

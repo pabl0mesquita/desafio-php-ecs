@@ -1,6 +1,8 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
-# Instalar extensões e dependências
+USER root
+
+# Instala extensões e dependências
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -10,14 +12,12 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && docker-php-ext-install gd zip pdo pdo_pgsql pgsql \
     && a2enmod rewrite 
-
-RUN pecl install opentelemetry
-
+    
 # Configurar o DocumentRoot (opcional)
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 
-# Instalar Composer
+# Instalar Composer ( Gerenciador de dependências do PHP )
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /var/www/html/
@@ -28,7 +28,7 @@ RUN chown -R www-data:www-data .
 # Copia o composer 
 COPY ./composer.json .
  
-# Instalar as dependências do projeto
+# Instala as dependências do projeto
 RUN composer install
 COPY . .
 
