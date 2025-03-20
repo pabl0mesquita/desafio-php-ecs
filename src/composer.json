@@ -13,11 +13,6 @@
     ],
     "require": {
         "vlucas/phpdotenv": "^5.6",
-        "open-telemetry/sdk": "^1.2",
-        "monolog/monolog": "^3.8",
-        "open-telemetry/exporter-otlp": "^1.2",
-        "symfony/http-client": "^7.2",
-        "open-telemetry/opentelemetry-php-contrib": "^0.0.17",
         "graze/guzzle-jsonrpc": "^2.1"
     },
     "config": {
