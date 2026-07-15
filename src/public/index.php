@@ -22,18 +22,19 @@ $statusMessage = $isConnected
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>php-apache-ecs · Status da Aplicação</title>
+<title>Status da Aplicação</title>
 <style>
     :root {
-        --bg-gradient-start: #0f172a;
-        --bg-gradient-end: #1e293b;
-        --card-bg: #ffffff;
-        --text-main: #1e293b;
-        --text-muted: #64748b;
-        --online: #16a34a;
-        --online-bg: #dcfce7;
-        --offline: #dc2626;
-        --offline-bg: #fee2e2;
+        --bg-gradient-start: #020617;
+        --bg-gradient-end: #0f172a;
+        --card-bg: #1e293b;
+        --card-border: rgba(255, 255, 255, 0.08);
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        --online: #4ade80;
+        --online-bg: rgba(74, 222, 128, 0.15);
+        --offline: #f87171;
+        --offline-bg: rgba(248, 113, 113, 0.15);
     }
 
     * {
@@ -53,8 +54,9 @@ $statusMessage = $isConnected
 
     .card {
         background: var(--card-bg);
+        border: 1px solid var(--card-border);
         border-radius: 16px;
-        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
         padding: 40px 32px;
         max-width: 420px;
         width: 100%;
@@ -142,13 +144,13 @@ $statusMessage = $isConnected
     .footer {
         margin-top: 28px;
         font-size: 0.75rem;
-        color: #94a3b8;
+        color: #64748b;
     }
 </style>
 </head>
 <body>
     <div class="card">
-        <h1>php-apache-ecs</h1>
+        <h1>Desafio AWS</h1>
         <p class="subtitle">Status da conexão com o banco de dados</p>
 
         <button type="button" class="status-button <?= $statusClass ?>">
