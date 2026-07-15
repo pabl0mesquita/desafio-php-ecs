@@ -1,0 +1,28 @@
+FROM php:8.3-apache
+
+# Composer copiado da imagem oficial (evita instalar via curl | sh)
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Extensão necessária pela aplicação: conexão PDO com PostgreSQL
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libpq-dev \
+        unzip \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && rm -rf /var/lib/apt/lists/*
+
+# A aplicação fica em public/, então o DocumentRoot do Apache aponta pra lá
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+
+WORKDIR /var/www/html
+
+# Instala as dependências antes de copiar o restante do código (cache de camada)
+COPY src/composer.json src/composer.lock* ./
+RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts
+
+# Copia o código da aplicação já com o dono correto
+COPY --chown=www-data:www-data src/ ./
+
+EXPOSE 80
+
+CMD ["apache2-foreground"]
